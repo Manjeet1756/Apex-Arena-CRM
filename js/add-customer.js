@@ -5,16 +5,13 @@ const API_URL =
 
 document
 .getElementById("customerForm")
-.addEventListener(
-"submit",
-async function(e){
-
+.addEventListener("submit", async function(e){
 
 e.preventDefault();
 
 
 
-const customer={
+const customer = {
 
 
 name:
@@ -46,10 +43,6 @@ new Date()
 
 
 
-console.log(customer);
-
-
-
 try{
 
 
@@ -70,27 +63,109 @@ alert(
 
 
 
+
+// Create WhatsApp Message
+
+const message = `
+
+🏋️ Welcome to Apex Arena Gym 💪
+
+
+Hello ${customer.name},
+
+
+Thank you for joining Apex Arena Gym.
+
+
+Your Membership Details:
+
+
+👤 Name:
+${customer.name}
+
+
+📱 Phone:
+${customer.phone}
+
+
+📚 Plan:
+${customer.plan}
+
+
+💰 Amount Paid:
+₹${customer.amount}
+
+
+📅 Joining Date:
+${customer.date}
+
+
+We are happy to have you as a part of Apex Arena family.
+
+
+Stay Fit 💪
+Stay Strong 🔥
+
+
+
+Thank You,
+Apex Arena Gym
+
+`;
+
+
+
+// Open WhatsApp
+
+const whatsappURL =
+"https://wa.me/91"
++
+customer.phone
++
+"?text="
++
+encodeURIComponent(message);
+
+
+
+window.open(
+whatsappURL,
+"_blank"
+);
+
+
+
+// Reset Form
+
 this.reset();
 
 
 
-window.location.href=
-"customer.html";
+setTimeout(()=>{
+
+window.location.href="customers.html";
+
+},1500);
 
 
 
 }
 
+
+
 catch(error){
+
 
 console.log(error);
 
+
 alert(
-"Failed to save customer"
+"Customer save failed"
 );
 
 
 }
+
 
 
 });
