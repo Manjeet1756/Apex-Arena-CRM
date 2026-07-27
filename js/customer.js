@@ -100,7 +100,7 @@ ${customer.phone}
 
 
 <td class="p-3">
-${customer.email || "-"}
+${customer.email}
 </td>
 
 

@@ -13,41 +13,91 @@
 <body class="bg-gray-100">
 
 
-<nav class="bg-blue-700 text-white p-4">
+<nav class="bg-blue-700 text-white">
 
 
-<div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between gap-3">
+<div class="flex justify-between items-center p-4">
 
 
-<h1 class="font-bold text-xl">
+<h1 class="text-xl font-bold">
 
-🏋️ Apex Arena CRM
+🏋️ Apex Arena
 
 </h1>
 
 
 
-<div class="flex flex-wrap gap-3">
+<button 
+onclick="openMenu()"
+class="text-3xl">
+
+
+☰
+
+
+</button>
+
+
+
+</div>
+
+
+
+</nav>
+
+<div 
+id="sidebar"
+
+class="fixed top-0 left-0 h-full w-72 bg-white shadow-xl transform -translate-x-full transition duration-300 z-50">
+
+
+<div class="bg-blue-700 text-white p-5">
+
+
+<h2 class="text-xl font-bold">
+
+🏋️ Apex Arena
+
+</h2>
+
+
+</div>
+
+
+
+<div class="p-5 flex flex-col gap-5 text-lg">
 
 
 <a href="dashboard.html">
-Dashboard
+
+📊 Dashboard
+
 </a>
+
 
 
 <a href="customer.html">
-Customers
+
+👥 Customers
+
 </a>
+
 
 
 <a href="add-customer.html">
-New Customer
+
+➕ New Customer
+
 </a>
 
 
 
-<button onclick="logout()">
-Logout
+
+<button onclick="logout()"
+class="text-left text-red-600">
+
+🚪 Logout
+
 </button>
 
 
@@ -57,7 +107,17 @@ Logout
 </div>
 
 
-</nav>
+
+<div
+
+id="overlay"
+
+onclick="closeMenu()"
+
+class="hidden fixed inset-0 bg-black/50 z-40">
+
+
+</div>
 
 
 
@@ -73,25 +133,52 @@ Dashboard
 
 
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
 
-<div class="bg-white p-5 rounded shadow">
+<div class="bg-white rounded-2xl p-5 shadow">
 
-<h3>
-Total Customers
-</h3>
+<p class="text-gray-500">
 
-<p id="totalCustomers"
-class="text-3xl font-bold">
-
-0
+Total Members
 
 </p>
 
 
+<h2 class="text-3xl font-bold">
+
+120
+
+</h2>
+
+
 </div>
 
+
+
+
+<div class="bg-white rounded-2xl p-5 shadow">
+
+
+<p class="text-gray-500">
+
+Collection
+
+</p>
+
+
+<h2 class="text-3xl font-bold">
+
+₹50,000
+
+</h2>
+
+
+</div>
+
+
+
+</div>
 
 
 
@@ -117,9 +204,21 @@ class="text-3xl font-bold">
 
 </div>
 
+<a
+
+href="add-customer.html"
+
+class="fixed bottom-5 right-5 bg-blue-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-lg">
+
+
++
+
+</a>
+
 
 
 <script src="js/dashboard.js"></script>
+<script src="js/menu.js"></script>
 
 
 </body>
