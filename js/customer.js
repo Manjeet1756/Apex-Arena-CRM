@@ -2,12 +2,27 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbzuVkC9LyPu46crcNrWaxjwBxpKyWMJZ35Qhro7u6CDa0Lwpp4EhMBvMasJQi6Em-POQg/exec";
 
 
-const customerList =
-document.getElementById("customerList");
-
-
 
 async function loadCustomers(){
+
+
+const table =
+document.getElementById("customerData");
+
+
+
+table.innerHTML = `
+
+<tr>
+<td colspan="6" class="p-5 text-center">
+
+Loading Customers...
+
+</td>
+</tr>
+
+`;
+
 
 
 try{
@@ -17,50 +32,93 @@ const response = await fetch(API_URL);
 
 
 
+if(!response.ok){
+
+throw new Error(
+"API Error " + response.status
+);
+
+}
+
+
+
 const customers =
 await response.json();
 
 
 
-console.log(customers);
+console.log("Customers:",customers);
 
 
 
-let html="";
+if(customers.length === 0){
+
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="6"
+class="p-5 text-center">
+
+No Customers Found
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
 
 
 
-customers.reverse().forEach(customer=>{
+let rows="";
 
 
-html += `
+
+customers.reverse()
+.forEach(customer=>{
+
+
+rows += `
 
 
 <tr class="border-b">
 
 
 <td class="p-3">
-
 ${customer.name}
-
 </td>
 
 
-
 <td class="p-3">
-
 ${customer.phone}
-
 </td>
 
+
+<td class="p-3">
+${customer.email || "-"}
+</td>
+
+
+<td class="p-3">
+${customer.plan}
+</td>
+
+
+<td class="p-3">
+₹${customer.amount}
+</td>
 
 
 <td class="p-3">
 
-₹${customer.amount}
+${customer.date}
 
 </td>
-
 
 
 <td class="p-3">
@@ -68,11 +126,11 @@ ${customer.phone}
 
 <a
 
+href="https://wa.me/91${customer.phone}?text=Hello ${customer.name}, welcome to Apex Arena Gym. Your payment of ₹${customer.amount} has been received."
+
 target="_blank"
 
-class="bg-green-600 text-white px-3 py-2 rounded"
-
-href="https://wa.me/91${customer.phone}?text=Hello ${customer.name}, Thank you for joining Apex Arena Gym. Your payment of ₹${customer.amount} has been received.">
+class="bg-green-600 text-white px-3 py-2 rounded">
 
 
 WhatsApp
@@ -87,35 +145,38 @@ WhatsApp
 </tr>
 
 
-
 `;
+
 
 
 });
 
 
 
-customerList.innerHTML = html;
+table.innerHTML=rows;
 
 
 
 }
 
-
-
 catch(error){
 
 
-console.log(error);
+console.error(
+"Fetch Error:",
+error
+);
 
 
-customerList.innerHTML = `
+
+table.innerHTML = `
 
 <tr>
 
-<td colspan="4">
+<td colspan="6"
+class="p-5 text-red-600 text-center">
 
-Error loading customers
+Failed to load customers
 
 </td>
 
