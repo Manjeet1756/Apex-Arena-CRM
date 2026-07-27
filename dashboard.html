@@ -3,9 +3,7 @@
 
 <head>
 
-<title>
-Apex Arena CRM Dashboard
-</title>
+<title>Apex Arena Dashboard</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -15,35 +13,93 @@ Apex Arena CRM Dashboard
 <body class="bg-gray-100">
 
 
-<div class="max-w-5xl mx-auto p-6">
+<nav class="bg-blue-700 text-white p-4">
 
 
-<h1 class="text-3xl font-bold">
+<div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between gap-3">
+
+
+<h1 class="font-bold text-xl">
+
 🏋️ Apex Arena CRM
+
 </h1>
 
 
-<div class="grid md:grid-cols-2 gap-5 mt-6">
+
+<div class="flex flex-wrap gap-3">
+
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+
+<a href="customers.html">
+Customers
+</a>
+
+
+<a href="add-customer.html">
+New Customer
+</a>
+
+
+
+<button onclick="logout()">
+Logout
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</nav>
+
+
+
+
+<div class="max-w-6xl mx-auto p-4 sm:p-6">
+
+
+<h2 class="text-2xl font-bold">
+
+Dashboard
+
+</h2>
+
+
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
 
 
 <div class="bg-white p-5 rounded shadow">
 
-<h3>Total Members</h3>
+<h3>
+Total Customers
+</h3>
 
-<p id="totalMembers"
+<p id="totalCustomers"
 class="text-3xl font-bold">
 
 0
 
 </p>
 
+
 </div>
+
 
 
 
 <div class="bg-white p-5 rounded shadow">
 
-<h3>Total Collection</h3>
+<h3>
+Total Collection
+</h3>
 
 <p id="totalAmount"
 class="text-3xl font-bold">
@@ -55,64 +111,12 @@ class="text-3xl font-bold">
 </div>
 
 
-</div>
-
-
-
-<div class="bg-white mt-8 p-5 rounded shadow">
-
-
-<h2 class="text-xl font-bold mb-4">
-
-Members
-
-</h2>
-
-
-<table class="w-full">
-
-<thead>
-
-<tr>
-
-<th class="text-left">
-Name
-</th>
-
-
-<th>
-Phone
-</th>
-
-
-<th>
-Amount
-</th>
-
-
-<th>
-Action
-</th>
-
-
-</tr>
-
-</thead>
-
-
-<tbody id="memberList">
-
-</tbody>
-
-
-</table>
-
 
 </div>
 
 
-
 </div>
+
 
 
 <script src="js/dashboard.js"></script>
