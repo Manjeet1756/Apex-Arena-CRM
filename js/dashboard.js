@@ -1,44 +1,108 @@
+const API_URL =
+"https://script.google.com/macros/s/AKfycbwxTnsX48ltWt4SrcbUK1YvE_npQ48iSS-EQqmAVGx03XawcTsaVMx1hh-3O-RNA6SfTQ/exec";
 
 
-<html>
 
-<head>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-</head>
+async function loadMembers(){
 
 
-<body class="bg-gray-100">
+try{
 
 
-<div class="p-5">
+const response = await fetch(API_URL);
 
 
-<h1 class="text-3xl font-bold">
-
-Apex Arena CRM Dashboard
-
-</h1>
+const members = await response.json();
 
 
-<div class="bg-white mt-5 p-5 rounded">
 
-Total Members
-
-<h2 id="total">
-
-0
-
-</h2>
+console.log(members);
 
 
-</div>
+
+document.getElementById("totalMembers")
+.innerText = members.length;
 
 
-</div>
+
+let total = 0;
 
 
-</body>
+members.forEach(member=>{
 
-</html>
+total += Number(member.amount);
+
+});
+
+
+
+document.getElementById("totalAmount")
+.innerText = "₹" + total;
+
+
+
+let html="";
+
+
+members.forEach(member=>{
+
+
+html += `
+
+<tr>
+
+<td>
+${member.name}
+</td>
+
+
+<td>
+${member.phone}
+</td>
+
+
+<td>
+₹${member.amount}
+</td>
+
+
+<td>
+
+<a 
+target="_blank"
+href="https://wa.me/91${member.phone}?text=Hello ${member.name}, Welcome to Apex Arena Gym">
+
+WhatsApp
+
+</a>
+
+</td>
+
+
+</tr>
+
+`;
+
+
+});
+
+
+
+document.getElementById("memberList")
+.innerHTML = html;
+
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+}
+
+
+
+loadMembers();

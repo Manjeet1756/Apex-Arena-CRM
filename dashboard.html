@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+Apex Arena CRM Dashboard
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-gray-100">
+
+
+<div class="max-w-5xl mx-auto p-6">
+
+
+<h1 class="text-3xl font-bold">
+🏋️ Apex Arena CRM
+</h1>
+
+
+<div class="grid md:grid-cols-2 gap-5 mt-6">
+
+
+<div class="bg-white p-5 rounded shadow">
+
+<h3>Total Members</h3>
+
+<p id="totalMembers"
+class="text-3xl font-bold">
+
+0
+
+</p>
+
+</div>
+
+
+
+<div class="bg-white p-5 rounded shadow">
+
+<h3>Total Collection</h3>
+
+<p id="totalAmount"
+class="text-3xl font-bold">
+
+₹0
+
+</p>
+
+</div>
+
+
+</div>
+
+
+
+<div class="bg-white mt-8 p-5 rounded shadow">
+
+
+<h2 class="text-xl font-bold mb-4">
+
+Members
+
+</h2>
+
+
+<table class="w-full">
+
+<thead>
+
+<tr>
+
+<th class="text-left">
+Name
+</th>
+
+
+<th>
+Phone
+</th>
+
+
+<th>
+Amount
+</th>
+
+
+<th>
+Action
+</th>
+
+
+</tr>
+
+</thead>
+
+
+<tbody id="memberList">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+</div>
+
+
+<script src="js/dashboard.js"></script>
+
+
+</body>
+
+</html>
