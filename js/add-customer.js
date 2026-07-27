@@ -1,34 +1,45 @@
 const API_URL =
-"https://script.google.com/macros/s/AKfycbwxTnsX48ltWt4SrcbUK1YvE_npQ48iSS-EQqmAVGx03XawcTsaVMx1hh-3O-RNA6SfTQ/exec";
+"https://script.google.com/macros/s/AKfycbyR8GDtZ7rDl9wIKaZVHHrlOSmBU8azAz4-YuiGwUslYpWJMaMgRvIp_K_ec0267clkPw/exec";
 
 
-const form = document.getElementById("customerForm");
 
+document
+.getElementById("customerForm")
+.addEventListener(
+"submit",
+async function(e){
 
-if(form){
-
-form.addEventListener("submit", async function(e){
 
 e.preventDefault();
 
 
-const customer = {
 
-name: document.getElementById("name").value,
+const customer={
 
-phone: document.getElementById("phone").value,
 
-email: document.getElementById("email").value,
+name:
+document.getElementById("name").value,
 
-plan: document.getElementById("plan").value,
 
-amount: document.getElementById("amount").value,
+phone:
+document.getElementById("phone").value,
 
-payment:
-document.getElementById("payment").value,
+
+email:
+document.getElementById("email").value,
+
+
+plan:
+document.getElementById("plan").value,
+
+
+amount:
+document.getElementById("amount").value,
+
 
 date:
-new Date().toLocaleDateString()
+new Date()
+.toLocaleDateString("en-GB")
 
 
 };
@@ -42,33 +53,29 @@ console.log(customer);
 try{
 
 
-const response = await fetch(API_URL,{
+await fetch(API_URL,{
 
 method:"POST",
 
-body:JSON.stringify(customer)
+body:
+JSON.stringify(customer)
 
 });
 
 
 
-const result = await response.text();
+alert(
+"Customer Added Successfully"
+);
 
 
 
-console.log(result);
+this.reset();
 
 
 
-alert("Customer Added Successfully");
-
-
-
-form.reset();
-
-
-
-window.location.href="customers.html";
+window.location.href=
+"customers.html";
 
 
 
@@ -76,20 +83,14 @@ window.location.href="customers.html";
 
 catch(error){
 
-
-console.error(error);
-
+console.log(error);
 
 alert(
-"Something went wrong while saving customer"
+"Failed to save customer"
 );
 
 
 }
 
 
-
 });
-
-
-}
