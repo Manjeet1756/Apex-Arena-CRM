@@ -75,7 +75,7 @@ this.reset();
 
 
 window.location.href=
-"customers.html";
+"customer.html";
 
 
 
