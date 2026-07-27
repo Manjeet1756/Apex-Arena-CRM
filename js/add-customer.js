@@ -143,7 +143,7 @@ this.reset();
 
 setTimeout(()=>{
 
-window.location.href="customers.html";
+window.location.href="customer.html";
 
 },1500);
 
