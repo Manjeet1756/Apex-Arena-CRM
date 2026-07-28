@@ -1,5 +1,5 @@
 const ADMIN_EMAIL = "admin@apexarena.com";
-const ADMIN_PASSWORD = "123456";
+const ADMIN_PASSWORD = "apex@123";
 
 
 document

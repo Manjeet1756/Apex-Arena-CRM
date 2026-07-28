@@ -1,25 +1,33 @@
-
-
-
 const API_URL =
-"https://script.google.com/macros/s/AKfycbztCASYjDuoXyQle5Tv7ZtXkuLnZrDj7UjuBGjLGb9nUT5puEFQfPiCzdx6Vn-gY24ayg/exec";
+"https://script.google.com/macros/s/AKfycbwyZ_fTgYFhAGw09A4yGnRSuyYc-pIwPSxEnbiOK6vyZXyDTXmwrjwKsk9Q0JQ1apzXjQ/exec";
+
 
 
 // ===============================
-// IMAGE
+// IMAGE HANDLING
 // ===============================
 
 let imageBase64 = "";
 
-const imageInput = document.getElementById("customerImage");
-const imagePreview = document.getElementById("imagePreview");
-const defaultAvatar = document.getElementById("defaultAvatar");
+
+const imageInput =
+document.getElementById("customerImage");
+
+
+const imagePreview =
+document.getElementById("imagePreview");
+
+
+const defaultAvatar =
+document.getElementById("defaultAvatar");
 
 
 
 if(imageInput){
 
+
 imageInput.addEventListener("change",function(){
+
 
 const file=this.files[0];
 
@@ -32,15 +40,19 @@ const reader=new FileReader();
 
 reader.onload=function(e){
 
+
 imageBase64=e.target.result;
+
 
 
 if(imagePreview){
 
 imagePreview.src=imageBase64;
+
 imagePreview.classList.remove("hidden");
 
 }
+
 
 
 if(defaultAvatar){
@@ -50,10 +62,13 @@ defaultAvatar.classList.add("hidden");
 }
 
 
+
 };
 
 
+
 reader.readAsDataURL(file);
+
 
 
 }
@@ -68,8 +83,9 @@ reader.readAsDataURL(file);
 
 
 
+
 // ===============================
-// NORMALIZE PHONE
+// CLEAN PHONE NUMBER
 // ===============================
 
 function cleanPhone(phone){
@@ -77,71 +93,6 @@ function cleanPhone(phone){
 return String(phone)
 .replace(/\D/g,"")
 .slice(-10);
-
-}
-
-
-
-
-
-
-// ===============================
-// CHECK GOOGLE SHEET
-// ===============================
-
-async function checkExistingCustomer(phone){
-
-
-try{
-
-
-const response = await fetch(API_URL);
-
-
-
-const customers = await response.json();
-
-
-
-console.log("Google Sheet Data:",customers);
-
-
-
-const userPhone = cleanPhone(phone);
-
-
-
-const foundCustomer = customers.find(customer=>{
-
-
-return cleanPhone(customer.phone) === userPhone;
-
-
-});
-
-
-
-return foundCustomer || null;
-
-
-
-}
-
-catch(error){
-
-
-console.log(
-"Sheet Fetch Error:",
-error
-);
-
-
-return null;
-
-
-}
-
-
 
 }
 
@@ -162,33 +113,47 @@ document
 .addEventListener("submit",async function(e){
 
 
+
 e.preventDefault();
 
 
 
 
 
-const customer={
+const customer = {
 
 
 name:
-document.getElementById("name").value.trim(),
+document.getElementById("name")
+.value
+.trim(),
+
 
 
 phone:
-document.getElementById("phone").value.trim(),
+document.getElementById("phone")
+.value
+.trim(),
+
 
 
 email:
-document.getElementById("email").value.trim(),
+document.getElementById("email")
+.value
+.trim(),
+
 
 
 plan:
-document.getElementById("plan").value,
+document.getElementById("plan")
+.value,
+
 
 
 amount:
-document.getElementById("amount").value,
+document.getElementById("amount")
+.value,
+
 
 
 date:
@@ -196,8 +161,9 @@ new Date()
 .toLocaleDateString("en-GB"),
 
 
+
 image:
-imageBase64
+imageBase64 || ""
 
 
 
@@ -207,8 +173,10 @@ imageBase64
 
 
 
+
+
 // ===============================
-// REQUIRED CHECK
+// VALIDATION
 // ===============================
 
 
@@ -232,11 +200,12 @@ return;
 
 
 
+
 if(cleanPhone(customer.phone).length !== 10){
 
 
 alert(
-"Enter valid WhatsApp number"
+"Please enter valid WhatsApp number"
 );
 
 
@@ -244,7 +213,6 @@ return;
 
 
 }
-
 
 
 
@@ -254,66 +222,13 @@ return;
 try{
 
 
-// ===============================
-// DUPLICATE CHECK
-// ===============================
-
-
-const existing =
-await checkExistingCustomer(customer.phone);
-
-
-
-if(existing){
-
-
-alert(
-
-`⚠️ You are already a member!
-
-
-👤 Name:
-${existing.name}
-
-
-📱 Phone:
-${existing.phone}
-
-
-📦 Plan:
-${existing.plan}
-
-
-💰 Amount:
-₹${existing.amount}
-
-
-📅 Joining Date:
-${existing.date}
-
-
-Please renew your membership.`
-
-);
-
-
-return;
-
-
-}
-
-
-
-
-
-
 
 // ===============================
-// SAVE TO GOOGLE SHEET
+// SEND TO GOOGLE SHEET API
 // ===============================
 
 
-const saveResponse =
+const response =
 await fetch(API_URL,{
 
 
@@ -330,8 +245,10 @@ JSON.stringify(customer)
 
 
 
+
+
 const result =
-await saveResponse.json();
+await response.json();
 
 
 
@@ -342,7 +259,71 @@ console.log(result);
 
 
 
+
+// ===============================
+// ALREADY MEMBER
+// ===============================
+
+
+if(result.exists){
+
+
+
+const member =
+result.customer;
+
+
+
+alert(
+
+`⚠️ Already a Member of Apex Arena Gym
+
+
+👤 Name:
+${member.name}
+
+
+📱 WhatsApp:
+${member.phone}
+
+
+📦 Current Plan:
+${member.plan}
+
+
+💰 Amount Paid:
+₹${member.amount}
+
+
+📅 Joining Date:
+${member.date}
+
+
+Please renew the membership instead.`
+
+);
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+
+// ===============================
+// SUCCESS
+// ===============================
+
+
 if(result.success){
+
 
 
 alert(
@@ -352,11 +333,12 @@ alert(
 
 
 }
+
 else{
 
 
 alert(
-"❌ Customer not saved"
+"❌ Customer could not be added"
 );
 
 
@@ -372,7 +354,7 @@ return;
 
 
 // ===============================
-// WHATSAPP
+// WHATSAPP MESSAGE
 // ===============================
 
 
@@ -380,11 +362,12 @@ const message = `
 
 🏋️ *WELCOME TO APEX ARENA GYM* 💪
 
+━━━━━━━━━━━━━━
 
 Hi *${customer.name}* 👋
 
 
-Your membership has been activated successfully.
+🎉 Your membership has been successfully activated.
 
 
 📋 *MEMBERSHIP DETAILS*
@@ -394,8 +377,12 @@ Your membership has been activated successfully.
 ${customer.name}
 
 
-📱 Phone:
+📱 WhatsApp:
 ${customer.phone}
+
+
+📧 Email:
+${customer.email || "Not Provided"}
 
 
 📦 Plan:
@@ -410,13 +397,22 @@ ${customer.plan}
 ${customer.date}
 
 
+━━━━━━━━━━━━━━
+
+
+💪 Stay Consistent
+
+🔥 Stay Strong
+
+🏆 Achieve Your Fitness Goals
+
 
 Thank you for choosing
 
 *Apex Arena Gym* ❤️
 
 
-Stay Fit 💪
+*Team Apex Arena Gym*
 
 `;
 
@@ -424,14 +420,29 @@ Stay Fit 💪
 
 
 
+
+
+// ===============================
+// OPEN WHATSAPP
+// ===============================
+
+
 const whatsappURL =
+
 "https://wa.me/91"
+
 +
+
 cleanPhone(customer.phone)
+
 +
+
 "?text="
+
 +
+
 encodeURIComponent(message);
+
 
 
 
@@ -448,12 +459,14 @@ whatsappURL,
 
 
 
+
 // ===============================
-// RESET
+// RESET FORM
 // ===============================
 
 
 this.reset();
+
 
 
 imageBase64="";
@@ -462,16 +475,21 @@ imageBase64="";
 
 if(imagePreview){
 
+
 imagePreview.src="";
 
 imagePreview.classList.add("hidden");
 
+
 }
+
 
 
 if(defaultAvatar){
 
+
 defaultAvatar.classList.remove("hidden");
+
 
 }
 
@@ -480,13 +498,16 @@ defaultAvatar.classList.remove("hidden");
 
 
 
+
+// REDIRECT
 setTimeout(()=>{
 
 
 window.location.href="customer.html";
 
 
-},10);
+},1500);
+
 
 
 
@@ -498,12 +519,15 @@ window.location.href="customer.html";
 catch(error){
 
 
+
 console.log(error);
 
 
+
 alert(
-"Server error. Check Google Sheet API"
+"Server error. Please try again"
 );
+
 
 
 }
