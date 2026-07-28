@@ -288,7 +288,7 @@ setTimeout(()=>{
 
 
 window.location.href =
-"customers.html";
+"customer.html";
 
 
 },1500);
