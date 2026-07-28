@@ -1,55 +1,53 @@
+
+
+
 const API_URL =
 "https://script.google.com/macros/s/AKfycbztCASYjDuoXyQle5Tv7ZtXkuLnZrDj7UjuBGjLGb9nUT5puEFQfPiCzdx6Vn-gY24ayg/exec";
 
 
-
-// Image variables
+// ===============================
+// IMAGE
+// ===============================
 
 let imageBase64 = "";
 
-const imageInput =
-document.getElementById("customerImage");
+const imageInput = document.getElementById("customerImage");
+const imagePreview = document.getElementById("imagePreview");
+const defaultAvatar = document.getElementById("defaultAvatar");
 
 
-const imagePreview =
-document.getElementById("imagePreview");
-
-
-const defaultAvatar =
-document.getElementById("defaultAvatar");
-
-
-
-// Capture image and preview
 
 if(imageInput){
 
-imageInput.addEventListener("change", function(){
+imageInput.addEventListener("change",function(){
 
-
-const file = this.files[0];
+const file=this.files[0];
 
 
 if(file){
 
 
-const reader = new FileReader();
+const reader=new FileReader();
 
 
-reader.onload = function(e){
+reader.onload=function(e){
+
+imageBase64=e.target.result;
 
 
-imageBase64 = e.target.result;
+if(imagePreview){
 
-
-// Show preview
-
-imagePreview.src = imageBase64;
-
+imagePreview.src=imageBase64;
 imagePreview.classList.remove("hidden");
 
+}
+
+
+if(defaultAvatar){
 
 defaultAvatar.classList.add("hidden");
+
+}
 
 
 };
@@ -70,30 +68,119 @@ reader.readAsDataURL(file);
 
 
 
+// ===============================
+// NORMALIZE PHONE
+// ===============================
+
+function cleanPhone(phone){
+
+return String(phone)
+.replace(/\D/g,"")
+.slice(-10);
+
+}
+
+
+
+
+
+
+// ===============================
+// CHECK GOOGLE SHEET
+// ===============================
+
+async function checkExistingCustomer(phone){
+
+
+try{
+
+
+const response = await fetch(API_URL);
+
+
+
+const customers = await response.json();
+
+
+
+console.log("Google Sheet Data:",customers);
+
+
+
+const userPhone = cleanPhone(phone);
+
+
+
+const foundCustomer = customers.find(customer=>{
+
+
+return cleanPhone(customer.phone) === userPhone;
+
+
+});
+
+
+
+return foundCustomer || null;
+
+
+
+}
+
+catch(error){
+
+
+console.log(
+"Sheet Fetch Error:",
+error
+);
+
+
+return null;
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+// ===============================
+// FORM SUBMIT
+// ===============================
+
+
 document
 .getElementById("customerForm")
-.addEventListener("submit", async function(e){
+.addEventListener("submit",async function(e){
 
 
 e.preventDefault();
 
 
 
-// Customer Data
 
-const customer = {
+
+const customer={
 
 
 name:
-document.getElementById("name").value,
+document.getElementById("name").value.trim(),
 
 
 phone:
-document.getElementById("phone").value,
+document.getElementById("phone").value.trim(),
 
 
 email:
-document.getElementById("email").value,
+document.getElementById("email").value.trim(),
 
 
 plan:
@@ -109,10 +196,8 @@ new Date()
 .toLocaleDateString("en-GB"),
 
 
-// Image
-
 image:
-imageBase64 || ""
+imageBase64
 
 
 
@@ -121,22 +206,133 @@ imageBase64 || ""
 
 
 
+
+// ===============================
+// REQUIRED CHECK
+// ===============================
+
+
+if(
+!customer.name ||
+!customer.phone ||
+!customer.plan ||
+!customer.amount
+){
+
+
+alert(
+"Please fill all required fields"
+);
+
+
+return;
+
+
+}
+
+
+
+if(cleanPhone(customer.phone).length !== 10){
+
+
+alert(
+"Enter valid WhatsApp number"
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
 try{
 
 
-const response = await fetch(API_URL,{
+// ===============================
+// DUPLICATE CHECK
+// ===============================
+
+
+const existing =
+await checkExistingCustomer(customer.phone);
+
+
+
+if(existing){
+
+
+alert(
+
+`⚠️ You are already a member!
+
+
+👤 Name:
+${existing.name}
+
+
+📱 Phone:
+${existing.phone}
+
+
+📦 Plan:
+${existing.plan}
+
+
+💰 Amount:
+₹${existing.amount}
+
+
+📅 Joining Date:
+${existing.date}
+
+
+Please renew your membership.`
+
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+// ===============================
+// SAVE TO GOOGLE SHEET
+// ===============================
+
+
+const saveResponse =
+await fetch(API_URL,{
+
 
 method:"POST",
 
+
 body:
 JSON.stringify(customer)
+
+
 
 });
 
 
 
+
 const result =
-await response.json();
+await saveResponse.json();
+
 
 
 
@@ -144,16 +340,39 @@ console.log(result);
 
 
 
+
+
+if(result.success){
+
+
 alert(
-"Customer Added Successfully"
+"✅ Customer Added Successfully"
 );
+
+
+
+}
+else{
+
+
+alert(
+"❌ Customer not saved"
+);
+
+
+return;
+
+
+}
+
+
 
 
 
 
 
 // ===============================
-// WhatsApp Message
+// WHATSAPP
 // ===============================
 
 
@@ -161,58 +380,43 @@ const message = `
 
 🏋️ *WELCOME TO APEX ARENA GYM* 💪
 
-━━━━━━━━━━━━━━━━━━
 
-Hi *${customer.name}* 👋,
+Hi *${customer.name}* 👋
 
-Welcome to the *Apex Arena Gym* family! 🎉
+
+Your membership has been activated successfully.
 
 
 📋 *MEMBERSHIP DETAILS*
 
 
-👤 *Name:* ${customer.name}
-
-📱 *WhatsApp:* ${customer.phone}
-
-📧 *Email:* ${customer.email || "Not Provided"}
-
-📦 *Membership Plan:* ${customer.plan}
-
-💰 *Amount Paid:* ₹${customer.amount}
-
-📅 *Joining Date:* ${customer.date}
+👤 Name:
+${customer.name}
 
 
-━━━━━━━━━━━━━━━━━━
+📱 Phone:
+${customer.phone}
 
 
-🎯 *Remember:*
+📦 Plan:
+${customer.plan}
 
 
-🏋️ Be Consistent
-
-🥗 Eat Healthy
-
-💧 Stay Hydrated
-
-😴 Get Proper Rest
+💰 Amount Paid:
+₹${customer.amount}
 
 
-Success comes one workout at a time! 💯
+📅 Joining Date:
+${customer.date}
 
-
-━━━━━━━━━━━━━━━━━━
 
 
 Thank you for choosing
+
 *Apex Arena Gym* ❤️
 
 
-See you in the gym! 💪🔥
-
-
-*Team Apex Arena Gym*
+Stay Fit 💪
 
 `;
 
@@ -220,23 +424,13 @@ See you in the gym! 💪🔥
 
 
 
-// WhatsApp Open
-
-
 const whatsappURL =
-
 "https://wa.me/91"
-
 +
-
-customer.phone
-
+cleanPhone(customer.phone)
 +
-
 "?text="
-
 +
-
 encodeURIComponent(message);
 
 
@@ -253,15 +447,17 @@ whatsappURL,
 
 
 
-// Reset Form
+
+// ===============================
+// RESET
+// ===============================
+
 
 this.reset();
 
 
-
-// Reset Image
-
 imageBase64="";
+
 
 
 if(imagePreview){
@@ -287,11 +483,10 @@ defaultAvatar.classList.remove("hidden");
 setTimeout(()=>{
 
 
-window.location.href =
-"customer.html";
+window.location.href="customer.html";
 
 
-},1500);
+},10);
 
 
 
@@ -307,7 +502,7 @@ console.log(error);
 
 
 alert(
-"Customer save failed"
+"Server error. Check Google Sheet API"
 );
 
 
