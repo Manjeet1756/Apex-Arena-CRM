@@ -62,13 +62,11 @@ defaultAvatar.classList.add("hidden");
 }
 
 
-
 };
 
 
 
 reader.readAsDataURL(file);
-
 
 
 }
@@ -85,14 +83,16 @@ reader.readAsDataURL(file);
 
 
 // ===============================
-// CLEAN PHONE NUMBER
+// PHONE FORMAT
 // ===============================
 
 function cleanPhone(phone){
 
+
 return String(phone)
 .replace(/\D/g,"")
 .slice(-10);
+
 
 }
 
@@ -127,7 +127,6 @@ name:
 document.getElementById("name")
 .value
 .trim(),
-
 
 
 phone:
@@ -166,9 +165,7 @@ image:
 imageBase64 || ""
 
 
-
 };
-
 
 
 
@@ -200,7 +197,6 @@ return;
 
 
 
-
 if(cleanPhone(customer.phone).length !== 10){
 
 
@@ -218,27 +214,22 @@ return;
 
 
 
-
 try{
 
 
 
 // ===============================
-// SEND TO GOOGLE SHEET API
+// SAVE CUSTOMER
 // ===============================
 
 
 const response =
 await fetch(API_URL,{
 
-
 method:"POST",
-
 
 body:
 JSON.stringify(customer)
-
-
 
 });
 
@@ -252,7 +243,6 @@ await response.json();
 
 
 
-
 console.log(result);
 
 
@@ -261,7 +251,7 @@ console.log(result);
 
 
 // ===============================
-// ALREADY MEMBER
+// EXISTING CUSTOMER
 // ===============================
 
 
@@ -283,15 +273,15 @@ alert(
 ${member.name}
 
 
-📱 WhatsApp:
+📱 Phone:
 ${member.phone}
 
 
-📦 Current Plan:
+📦 Plan:
 ${member.plan}
 
 
-💰 Amount Paid:
+💰 Amount:
 ₹${member.amount}
 
 
@@ -299,7 +289,7 @@ ${member.plan}
 ${member.date}
 
 
-Please renew the membership instead.`
+Please renew membership.`
 
 );
 
@@ -309,8 +299,6 @@ return;
 
 
 }
-
-
 
 
 
@@ -322,23 +310,11 @@ return;
 // ===============================
 
 
-if(result.success){
-
-
-
-alert(
-"✅ Customer Added Successfully"
-);
-
-
-
-}
-
-else{
+if(!result.success){
 
 
 alert(
-"❌ Customer could not be added"
+"Customer not saved"
 );
 
 
@@ -351,6 +327,13 @@ return;
 
 
 
+alert(
+"✅ Customer Added Successfully"
+);
+
+
+
+
 
 
 // ===============================
@@ -358,19 +341,18 @@ return;
 // ===============================
 
 
-const message = `
+const message =
 
-🏋️ *WELCOME TO APEX ARENA GYM* 💪
-
-━━━━━━━━━━━━━━
-
-Hi *${customer.name}* 👋
+`🏋️ WELCOME TO APEX ARENA GYM 💪
 
 
-🎉 Your membership has been successfully activated.
+Hi ${customer.name} 👋
 
 
-📋 *MEMBERSHIP DETAILS*
+Your membership has been successfully activated.
+
+
+📋 MEMBERSHIP DETAILS
 
 
 👤 Name:
@@ -407,15 +389,20 @@ ${customer.date}
 🏆 Achieve Your Fitness Goals
 
 
-Thank you for choosing
-
-*Apex Arena Gym* ❤️
+Thank you for choosing Apex Arena Gym ❤️
 
 
-*Team Apex Arena Gym*
+Team Apex Arena Gym`;
 
-`;
 
+
+
+
+
+// Encode message
+
+const encodedMessage =
+encodeURIComponent(message);
 
 
 
@@ -423,13 +410,13 @@ Thank you for choosing
 
 
 // ===============================
-// OPEN WHATSAPP
+// WHATSAPP OPEN
 // ===============================
 
 
 const whatsappURL =
 
-"https://wa.me/91"
+"https://api.whatsapp.com/send?phone=91"
 
 +
 
@@ -437,16 +424,17 @@ cleanPhone(customer.phone)
 
 +
 
-"?text="
+"&text="
 
 +
 
-encodeURIComponent(message);
+encodedMessage;
 
 
 
 
 
+// Open WhatsApp
 
 window.open(
 whatsappURL,
@@ -459,14 +447,12 @@ whatsappURL,
 
 
 
-
 // ===============================
-// RESET FORM
+// RESET
 // ===============================
 
 
 this.reset();
-
 
 
 imageBase64="";
@@ -475,11 +461,9 @@ imageBase64="";
 
 if(imagePreview){
 
-
 imagePreview.src="";
 
 imagePreview.classList.add("hidden");
-
 
 }
 
@@ -487,9 +471,7 @@ imagePreview.classList.add("hidden");
 
 if(defaultAvatar){
 
-
 defaultAvatar.classList.remove("hidden");
-
 
 }
 
@@ -497,17 +479,13 @@ defaultAvatar.classList.remove("hidden");
 
 
 
-
-
-// REDIRECT
 setTimeout(()=>{
 
 
 window.location.href="customer.html";
 
 
-},1500);
-
+},2500);
 
 
 
@@ -519,9 +497,7 @@ window.location.href="customer.html";
 catch(error){
 
 
-
 console.log(error);
-
 
 
 alert(
