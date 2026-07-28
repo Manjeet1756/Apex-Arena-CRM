@@ -328,91 +328,84 @@ alert(
 
 
 
-// ===============================
+/// ===============================
 // WHATSAPP MESSAGE
 // ===============================
 
 
-const message =
+const message = `
+🏋️ Welcome to Apex Arena Gym 💪
 
-`🏋️ *WELCOME TO APEX ARENA GYM* 💪
+Hello ${customer.name} 👋
 
-
-Hi *${customer.name}* 👋
-
-
-🎉 Your membership has been successfully activated.
-
+Your membership has been successfully activated.
 
 ━━━━━━━━━━━━━━
 
-📋 *MEMBERSHIP DETAILS*
+MEMBERSHIP DETAILS
 
-
-👤 *Name:*
+Name:
 ${customer.name}
 
-
-📱 *WhatsApp:*
+WhatsApp:
 ${customer.phone}
 
-
-📧 *Email:*
+Email:
 ${customer.email || "Not Provided"}
 
-
-📦 *Plan:*
+Plan:
 ${customer.plan}
 
-
-💰 *Amount Paid:*
+Amount Paid:
 ₹${customer.amount}
 
-
-📅 *Joining Date:*
+Joining Date:
 ${customer.date}
-
 
 ━━━━━━━━━━━━━━
 
+Stay Fit 💪
+Stay Strong 🔥
 
-💪 Stay Consistent
+Thank you for joining Apex Arena Gym ❤️
 
-🔥 Stay Strong
-
-🏆 Achieve Your Fitness Goals
-
-
-Thank you for choosing
-
-*Apex Arena Gym* ❤️
-
-
-*Team Apex Arena Gym*`;
+Team Apex Arena Gym
+`;
 
 
 
+// Remove extra spaces and line breaks
+
+const finalMessage =
+message.trim();
+
+
+
+// Encode message
+
+const whatsappMessage =
+encodeURIComponent(finalMessage);
 
 
 
 
-// ===============================
-// WHATSAPP URL
-// ===============================
-
+// WhatsApp URL
 
 const whatsappURL =
+`https://wa.me/91${cleanPhone(customer.phone)}?text=${whatsappMessage}`;
 
-"https://wa.me/" +
 
-"91" +
 
-cleanPhone(customer.phone) +
+console.log("WhatsApp URL:", whatsappURL);
 
-"?text=" +
 
-encodeURIComponent(message);
 
+// Open WhatsApp
+
+window.open(
+whatsappURL,
+"_blank"
+);
 
 
 
