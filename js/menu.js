@@ -1,35 +1,27 @@
-function openMenu(){
+function openMenu() {
 
+    document
+        .getElementById("sidebar")
+        .classList
+        .remove("-translate-x-full");
 
-document
-.getElementById("sidebar")
-.classList
-.remove("-translate-x-full");
-
-
-document
-.getElementById("overlay")
-.classList
-.remove("hidden");
-
+    document
+        .getElementById("overlay")
+        .classList
+        .remove("hidden");
 
 }
 
+function closeMenu() {
 
+    document
+        .getElementById("sidebar")
+        .classList
+        .add("-translate-x-full");
 
-function closeMenu(){
-
-
-document
-.getElementById("sidebar")
-.classList
-.add("-translate-x-full");
-
-
-document
-.getElementById("overlay")
-.classList
-.add("hidden");
-
+    document
+        .getElementById("overlay")
+        .classList
+        .add("hidden");
 
 }
