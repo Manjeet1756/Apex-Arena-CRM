@@ -3,13 +3,83 @@ const API_URL =
 
 
 
+// Image variables
+
+let imageBase64 = "";
+
+const imageInput =
+document.getElementById("customerImage");
+
+
+const imagePreview =
+document.getElementById("imagePreview");
+
+
+const defaultAvatar =
+document.getElementById("defaultAvatar");
+
+
+
+// Capture image and preview
+
+if(imageInput){
+
+imageInput.addEventListener("change", function(){
+
+
+const file = this.files[0];
+
+
+if(file){
+
+
+const reader = new FileReader();
+
+
+reader.onload = function(e){
+
+
+imageBase64 = e.target.result;
+
+
+// Show preview
+
+imagePreview.src = imageBase64;
+
+imagePreview.classList.remove("hidden");
+
+
+defaultAvatar.classList.add("hidden");
+
+
+};
+
+
+reader.readAsDataURL(file);
+
+
+}
+
+
+});
+
+
+}
+
+
+
+
+
 document
 .getElementById("customerForm")
 .addEventListener("submit", async function(e){
 
+
 e.preventDefault();
 
 
+
+// Customer Data
 
 const customer = {
 
@@ -36,17 +106,25 @@ document.getElementById("amount").value,
 
 date:
 new Date()
-.toLocaleDateString("en-GB")
+.toLocaleDateString("en-GB"),
+
+
+// Image
+
+image:
+imageBase64 || ""
+
 
 
 };
 
 
 
+
 try{
 
 
-await fetch(API_URL,{
+const response = await fetch(API_URL,{
 
 method:"POST",
 
@@ -57,6 +135,15 @@ JSON.stringify(customer)
 
 
 
+const result =
+await response.json();
+
+
+
+console.log(result);
+
+
+
 alert(
 "Customer Added Successfully"
 );
@@ -64,67 +151,95 @@ alert(
 
 
 
-// Create WhatsApp Message
+
+// ===============================
+// WhatsApp Message
+// ===============================
+
 
 const message = `
 
-🏋️ Welcome to Apex Arena Gym 💪
+🏋️ *WELCOME TO APEX ARENA GYM* 💪
+
+━━━━━━━━━━━━━━━━━━
+
+Hi *${customer.name}* 👋,
+
+Welcome to the *Apex Arena Gym* family! 🎉
 
 
-Hello ${customer.name},
+📋 *MEMBERSHIP DETAILS*
 
 
-Thank you for joining Apex Arena Gym.
+👤 *Name:* ${customer.name}
+
+📱 *WhatsApp:* ${customer.phone}
+
+📧 *Email:* ${customer.email || "Not Provided"}
+
+📦 *Membership Plan:* ${customer.plan}
+
+💰 *Amount Paid:* ₹${customer.amount}
+
+📅 *Joining Date:* ${customer.date}
 
 
-Your Membership Details:
+━━━━━━━━━━━━━━━━━━
 
 
-👤 Name:
-${customer.name}
+🎯 *Remember:*
 
 
-📱 Phone:
-${customer.phone}
+🏋️ Be Consistent
+
+🥗 Eat Healthy
+
+💧 Stay Hydrated
+
+😴 Get Proper Rest
 
 
-📚 Plan:
-${customer.plan}
+Success comes one workout at a time! 💯
 
 
-💰 Amount Paid:
-₹${customer.amount}
+━━━━━━━━━━━━━━━━━━
 
 
-📅 Joining Date:
-${customer.date}
+Thank you for choosing
+*Apex Arena Gym* ❤️
 
 
-We are happy to have you as a part of Apex Arena family.
+See you in the gym! 💪🔥
 
 
-Stay Fit 💪
-Stay Strong 🔥
-
-
-
-Thank You,
-Apex Arena Gym
+*Team Apex Arena Gym*
 
 `;
 
 
 
-// Open WhatsApp
+
+
+// WhatsApp Open
+
 
 const whatsappURL =
+
 "https://wa.me/91"
+
 +
+
 customer.phone
+
 +
+
 "?text="
+
 +
+
 encodeURIComponent(message);
+
+
 
 
 
@@ -135,23 +250,55 @@ whatsappURL,
 
 
 
+
+
+
 // Reset Form
 
 this.reset();
 
 
 
+// Reset Image
+
+imageBase64="";
+
+
+if(imagePreview){
+
+imagePreview.src="";
+
+imagePreview.classList.add("hidden");
+
+}
+
+
+if(defaultAvatar){
+
+defaultAvatar.classList.remove("hidden");
+
+}
+
+
+
+
+
+
 setTimeout(()=>{
 
-window.location.href="customer.html";
+
+window.location.href =
+"customers.html";
+
 
 },1500);
 
 
 
+
+
+
 }
-
-
 
 catch(error){
 

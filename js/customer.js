@@ -63,9 +63,40 @@ cards.innerHTML+=`
 
 <div>
 
-<div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-2xl">
+<div class="w-16 h-16 rounded-full bg-blue-100 overflow-hidden flex items-center justify-center">
+
+
+${
+customer.image
+
+?
+
+`
+
+<img
+
+src="${customer.image}"
+
+alt="${customer.name}"
+
+class="w-full h-full object-cover">
+
+`
+
+:
+
+`
+
+<div class="text-3xl">
 
 👤
+
+</div>
+
+`
+
+}
+
 
 </div>
 
@@ -117,17 +148,35 @@ ${customer.date}
 
 </div>
 
+<div class="grid grid-cols-2 gap-3 mt-5">
+
+
 <a
 
 target="_blank"
 
 href="https://wa.me/91${customer.phone}"
 
-class="mt-5 flex justify-center items-center bg-green-600 text-white rounded-2xl h-12 font-semibold">
+class="flex justify-center items-center bg-green-600 text-white rounded-2xl h-12 font-semibold">
 
 WhatsApp
 
 </a>
+
+
+
+<button
+
+onclick="deleteCustomer('${customer.id}')"
+
+class="bg-red-600 text-white rounded-2xl h-12 font-semibold">
+
+Delete
+
+</button>
+
+
+</div>
 
 </div>
 
@@ -147,9 +196,60 @@ table.innerHTML+=`
 
 <tr class="border-b hover:bg-slate-50">
 
-<td class="p-4 font-semibold">
+<td class="p-4">
+
+<div class="flex items-center gap-3">
+
+
+<div class="w-12 h-12 rounded-full bg-blue-100 overflow-hidden flex items-center justify-center">
+
+
+${
+customer.image
+
+?
+
+`
+
+<img
+
+src="${customer.image}"
+
+class="w-full h-full object-cover">
+
+`
+
+:
+
+`
+
+<span class="text-2xl">
+
+👤
+
+</span>
+
+`
+
+}
+
+
+</div>
+
+
+<div>
+
+<p class="font-semibold">
 
 ${customer.name}
+
+</p>
+
+
+</div>
+
+
+</div>
 
 </td>
 

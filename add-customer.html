@@ -88,7 +88,7 @@ Apex Arena
 
                 </a>
 
-                <a href="customers.html" class="hover:text-blue-200">
+                <a href="customer.html" class="hover:text-blue-200">
 
                     Customers
 
@@ -109,6 +109,63 @@ Apex Arena
 
             <form id="customerForm" class="space-y-6">
 
+             <div class="text-center">
+
+<label class="block font-semibold mb-3">
+
+Customer Photo
+
+</label>
+
+
+<label for="customerImage"
+class="cursor-pointer">
+
+
+<div class="w-28 h-28 mx-auto rounded-full bg-blue-100 shadow-xl flex items-center justify-center overflow-hidden">
+
+
+<img
+id="imagePreview"
+class="hidden w-full h-full object-cover">
+
+
+<span
+id="defaultAvatar"
+class="text-5xl">
+
+👤
+
+</span>
+
+
+</div>
+
+
+</label>
+
+
+<input
+
+id="customerImage"
+
+type="file"
+
+accept="image/*"
+
+capture="environment"
+
+class="hidden">
+
+
+<p class="text-sm text-gray-500 mt-3">
+
+📷 Tap to capture customer photo
+
+</p>
+
+
+</div>
                 <div>
 
                     <label class="block font-medium mb-2">
@@ -196,6 +253,8 @@ Apex Arena
                         class="w-full h-14 rounded-2xl border border-gray-300 px-5 text-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
 
                 </div>
+
+                
 
                 <!-- Desktop Button -->
 
